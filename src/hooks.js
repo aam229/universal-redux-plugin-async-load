@@ -38,9 +38,9 @@ class AsyncDataLoader extends React.Component {
     const {location} = this.props;
     const {location: nextLocation} = nextProps;
 
-    // if((location.pathname !== nextLocation.pathname) || (location.search !== nextLocation.search)){
+    if((location.pathname !== nextLocation.pathname) || (location.search !== nextLocation.search)){
       loadAsync(this.context.store, nextProps.components);
-    // }
+    }
   }
 
   render() {
@@ -50,7 +50,7 @@ class AsyncDataLoader extends React.Component {
 
 function loadAsync(store, components){
   return flattenComponents(components)
-    .filter((Component) => typeof(Component.load) === "function")
+    .filter((Component) => Component && typeof(Component.load) === "function")
     .map((Component) => Component.load(store));
 }
 

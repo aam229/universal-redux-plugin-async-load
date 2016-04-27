@@ -6,9 +6,9 @@
   "version": "0.0.1",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aam229/universal-redux-plugins.git"
+    "url": "git+https://github.com/aam229/univeral-redux-plugin-async-load.git"
   },
-  "homepage": "git+https://github.com/aam229/universal-redux-plugins/univeral-redux-plugin-async-load",
+  "homepage": "git+https://github.com/aam229/univeral-redux-plugin-async-load",
   "main": "lib/index.js",
   "scripts": {
     "postinstall": "npm run compile",
@@ -16,7 +16,7 @@
     "lint": "eslint -c .eslintrc src bin config",
     "prepublish": "npm run compile"
   },
-  "dependencies": {
+  "devDependencies": {
     "babel-cli": "6.4.0",
     "babel-core": "6.4.0",
     "babel-eslint": "5.0.0-beta6",
@@ -32,11 +32,7 @@
     "eslint-config-airbnb": "0.1.1",
     "eslint-loader": "1.0.0",
     "eslint-plugin-import": "0.12.1",
-    "eslint-plugin-react": "3.7.1",
-    "redux": "3.0.5",
-    "react": "^0.14.3",
-    "react-redux": "4.0.6",
-    "react-router": "2.0.0-rc5"
+    "eslint-plugin-react": "3.7.1"
   },
   "peerDependencies": {
     "universal-redux": "^3.0.0"
@@ -46,6 +42,6 @@
     "npm": ">=3.3.12"
   },
   "bugs": {
-    "url": "https://github.com/aam229/universal-redux-plugins/issues"
+    "url": "https://github.com/aam229/univeral-redux-plugin-async-load/issues"
   }
 }
