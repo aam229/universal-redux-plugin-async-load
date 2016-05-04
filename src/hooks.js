@@ -5,7 +5,7 @@ import { hooks, environments, positions, register } from 'universal-redux/lib/ho
 register(hooks.CREATE_ROOT_COMPONENT, (data) => {
   return {
     ...data,
-    render: (props) => <AsyncDataLoader {...props} />
+    render: (props) => <AsyncDataLoader clientOnly={data.clientOnly} {...props} />
   };
 }, {
   position: positions.BEFORE,
@@ -35,16 +35,23 @@ class AsyncDataLoader extends React.Component {
 
   static propTypes = {
     components: PropTypes.array.isRequired,
-    location: PropTypes.object.isRequired
+    location: PropTypes.object.isRequired,
+    clientOnly: PropTypes.bool.isRequired
   };
+
+  constructor(props, context){
+    super(props, context);
+    this.isInitialized = false;
+  }
 
   componentWillReceiveProps(nextProps) {
     const {location} = this.props;
     const {location: nextLocation} = nextProps;
 
-    if((location.pathname !== nextLocation.pathname) || (location.search !== nextLocation.search)){
+    if((!this.isInitialized && this.props.clientOnly) || (location.pathname !== nextLocation.pathname) || (location.search !== nextLocation.search)) {
       loadAsync(this.context.store, nextProps.components, nextProps.params);
     }
+    this.isInitialized = true;
   }
 
   render() {
