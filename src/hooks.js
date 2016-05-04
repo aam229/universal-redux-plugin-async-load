@@ -15,8 +15,12 @@ register(hooks.CREATE_ROOT_COMPONENT, (data) => {
 });
 
 register(hooks.CREATE_ROOT_COMPONENT, (promise, { store, renderProps }) => {
-  return Promise.all(loadAsync(store, renderProps.components))
-    .then(() => promise);
+  return Promise.resolve()
+    .then(() => Promise.all(loadAsync(store, renderProps.components, renderProps.params)))
+    .then(() => promise, (err) => {
+      console.error(err);
+      return promise;
+    });
 }, {
   position: positions.AFTER,
   environments: [
@@ -39,7 +43,7 @@ class AsyncDataLoader extends React.Component {
     const {location: nextLocation} = nextProps;
 
     if((location.pathname !== nextLocation.pathname) || (location.search !== nextLocation.search)){
-      loadAsync(this.context.store, nextProps.components);
+      loadAsync(this.context.store, nextProps.components, nextProps.params);
     }
   }
 
@@ -48,10 +52,10 @@ class AsyncDataLoader extends React.Component {
   }
 }
 
-function loadAsync(store, components){
+function loadAsync(store, components, params){
   return flattenComponents(components)
     .filter((Component) => Component && typeof(Component.load) === "function")
-    .map((Component) => Component.load(store));
+    .map((Component) => Component.load(store, params));
 }
 
 function flattenComponents(components) {
