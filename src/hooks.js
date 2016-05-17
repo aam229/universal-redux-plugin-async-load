@@ -41,17 +41,21 @@ class AsyncDataLoader extends React.Component {
 
   constructor(props, context){
     super(props, context);
-    this.isInitialized = false;
+  }
+
+  componentWillMount(){
+    if(this.props.clientOnly){
+      loadAsync(this.context.store, this.props.components, this.props.params);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
     const {location} = this.props;
     const {location: nextLocation} = nextProps;
 
-    if((!this.isInitialized && this.props.clientOnly) || (location.pathname !== nextLocation.pathname) || (location.search !== nextLocation.search)) {
+    if((location.pathname !== nextLocation.pathname) || (location.search !== nextLocation.search)) {
       loadAsync(this.context.store, nextProps.components, nextProps.params);
     }
-    this.isInitialized = true;
   }
 
   render() {
