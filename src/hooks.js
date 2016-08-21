@@ -16,7 +16,7 @@ register(hooks.CREATE_ROOT_COMPONENT, (data) => {
 
 register(hooks.CREATE_ROOT_COMPONENT, (promise, { store, renderProps }) => {
   return Promise.resolve()
-    .then(() => Promise.all(loadAsync(store, renderProps.components, renderProps.params)))
+    .then(() => Promise.all(loadAsync(store, renderProps.components, null, renderProps.params, null)))
     .then(() => promise, (err) => {
       console.error(err);
       return promise;
@@ -45,7 +45,7 @@ class AsyncDataLoader extends React.Component {
 
   componentWillMount(){
     if(this.props.clientOnly){
-      loadAsync(this.context.store, this.props.components, this.props.params);
+      loadAsync(this.context.store, this.props.components, null, this.props.params, null);
     }
   }
 
@@ -54,7 +54,7 @@ class AsyncDataLoader extends React.Component {
     const {location: nextLocation} = nextProps;
 
     if((location.pathname !== nextLocation.pathname) || (location.search !== nextLocation.search)) {
-      loadAsync(this.context.store, nextProps.components, nextProps.params);
+      loadAsync(this.context.store, nextProps.components, this.props.components, nextProps.params, this. props.params);
     }
   }
 
@@ -63,10 +63,16 @@ class AsyncDataLoader extends React.Component {
   }
 }
 
-function loadAsync(store, components, params){
+function loadAsync(store, components, prevComponents, params, prevParams){
   return flattenComponents(components)
-    .filter((Component) => Component && typeof(Component.load) === "function")
-    .map((Component) => Component.load(store, params));
+    .map((Component, i) => {
+      if(!Component || typeof(Component.load) !== "function"){
+        return null;
+      }
+      let prevComponentParams = (prevComponents != null && prevComponents[i] === Component) ? prevParams : null;
+      return Component.load(store, params, prevComponentParams)
+    })
+    .filter(p => p !== null);
 }
 
 function flattenComponents(components) {
