@@ -49,12 +49,13 @@ class AsyncDataLoader extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
+  componentWillReceiveProps(newProps) {
+    const prevProps = this.props;
     const {location} = prevProps;
-    const {location: nextLocation} = this.props;
+    const {location: nextLocation} = newProps;
 
     if((location.pathname !== nextLocation.pathname) || (location.search !== nextLocation.search)) {
-      loadAsync(this.context.store, this.props.components, prevProps.components, this.props.params, prevProps.params);
+      loadAsync(this.context.store, newProps.components, prevProps.components, newProps.params, prevProps.params);
     }
   }
 
