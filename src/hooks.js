@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import { RouterContext } from 'react-router';
-import { hooks, environments, positions, register } from 'universal-redux/lib/hooks';
+import { hooks, environments, positions, register } from 'universal-redux';
 
 register(hooks.CREATE_ROOT_COMPONENT, (data) => {
   return {
